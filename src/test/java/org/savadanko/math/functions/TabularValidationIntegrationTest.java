@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,7 +30,7 @@ class TabularValidationIntegrationTest extends IntegrationTestSupport {
     void setUp() {
         CsvReader csvReader = new CsvReader();
         CsvWriter csvWriter = new CsvWriter();
-        FunctionFactory functionFactory = new FunctionFactory(EPS, MAX_ITERATIONS);
+        FunctionFactory functionFactory = new FunctionFactory(EPS, MAX_ITERATIONS, Logger.getLogger("test"));
 
         executorWithValidation = new CsvFunctionExecutor(csvReader, csvWriter, functionFactory, true);
         executorWithoutValidation = new CsvFunctionExecutor(csvReader, csvWriter, functionFactory, false);

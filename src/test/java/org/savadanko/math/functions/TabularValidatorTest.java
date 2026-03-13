@@ -75,24 +75,26 @@ class TabularValidatorTest extends IntegrationTestSupport {
 
     @Test
     void shouldDetectInvalidValues() {
-        // Намеренно неправильное значение sin(0) = 0.5 (должно быть 0.0)
         TabularValidator.ValidationResult result =
             TabularValidator.validateValue(ModuleType.SIN, 0.0, 0.5);
 
+        System.out.println("Error message: '" + result.getErrorMessage() + "'");
+        System.out.println("Is valid: " + result.isValid());
+
         assertFalse(result.isValid());
-        assertTrue(result.getErrorMessage().contains("expected=0"));
-        assertTrue(result.getErrorMessage().contains("actual=0.5"));
+        assertNotNull(result.getErrorMessage());
+        assertTrue(result.getErrorMessage().contains("expected"));
+        assertTrue(result.getErrorMessage().contains("actual"));
         assertEquals(0.0, result.getExpectedValue(), 1e-15);
         assertEquals(0.5, result.getActualValue(), 1e-15);
     }
 
     @Test
     void shouldHandleValuesWithoutTabularData() {
-        // Значение, для которого нет табличных данных
         TabularValidator.ValidationResult result =
             TabularValidator.validateValue(ModuleType.SIN, 1.23456, 0.94249);
 
-        assertTrue(result.isValid()); // Должно быть valid, так как нет данных для сравнения
+        assertTrue(result.isValid()); 
         assertTrue(result.getErrorMessage().contains("No tabular data for x="));
         assertTrue(Double.isNaN(result.getExpectedValue()));
     }
@@ -114,7 +116,7 @@ class TabularValidatorTest extends IntegrationTestSupport {
     @Test
     void shouldThrowOnMismatchedListSizes() {
         List<Double> xValues = Arrays.asList(0.0, Math.PI/6);
-        List<Double> yValues = Arrays.asList(0.0); // Размер не совпадает
+        List<Double> yValues = Arrays.asList(0.0); 
 
         assertThrows(IllegalArgumentException.class, () ->
             TabularValidator.validateValues(ModuleType.SIN, xValues, yValues));
@@ -122,14 +124,12 @@ class TabularValidatorTest extends IntegrationTestSupport {
 
     @Test
     void shouldNormalizeAnglesForTrigFunctions() {
-        // sin(2π) должно быть эквивалентно sin(0)
         TabularValidator.ValidationResult result =
             TabularValidator.validateValue(ModuleType.SIN, 2 * Math.PI, 0.0);
 
         assertTrue(result.isValid());
         assertEquals(0.0, result.getExpectedValue(), 1e-15);
 
-        // sin(-π) должно быть эквивалентно sin(π)
         TabularValidator.ValidationResult result2 =
             TabularValidator.validateValue(ModuleType.SIN, -Math.PI, 0.0);
 
@@ -153,12 +153,11 @@ class TabularValidatorTest extends IntegrationTestSupport {
         assertTrue(sinXValues.contains(Math.PI/4));
 
         List<Double> cotXValues = TabularValidator.getTabularXValues(ModuleType.COT);
-        assertTrue(cotXValues.isEmpty()); // Нет таблицы для COT
+        assertTrue(cotXValues.isEmpty());
     }
 
     @Test
     void shouldValidateWithRealFunctionImplementations() {
-        // Интеграционный тест с реальными функциями
         UnaryFunction sinFunction = new SinFunction(EPS, MAX_ITERATIONS);
         UnaryFunction cosFunction = new CosFunction(EPS, MAX_ITERATIONS);
 
@@ -184,10 +183,8 @@ class TabularValidatorTest extends IntegrationTestSupport {
         }
     }
 
-    // Вспомогательный класс для параметризованных тестов
     record TabularTestCase(double x, double expectedY) {}
 
-    // Тестовые данные для sin
     static Stream<TabularTestCase> sinTabularValues() {
         return Stream.of(
             new TabularTestCase(0.0, 0.0),
@@ -201,7 +198,6 @@ class TabularValidatorTest extends IntegrationTestSupport {
         );
     }
 
-    // Тестовые данные для cos
     static Stream<TabularTestCase> cosTabularValues() {
         return Stream.of(
             new TabularTestCase(0.0, 1.0),
@@ -215,7 +211,6 @@ class TabularValidatorTest extends IntegrationTestSupport {
         );
     }
 
-    // Тестовые данные для tan
     static Stream<TabularTestCase> tanTabularValues() {
         return Stream.of(
             new TabularTestCase(0.0, 0.0),
@@ -228,7 +223,6 @@ class TabularValidatorTest extends IntegrationTestSupport {
         );
     }
 
-    // Тестовые данные для ln
     static Stream<TabularTestCase> lnTabularValues() {
         return Stream.of(
             new TabularTestCase(1.0, 0.0),

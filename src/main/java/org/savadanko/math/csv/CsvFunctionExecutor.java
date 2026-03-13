@@ -4,7 +4,6 @@ import org.savadanko.math.utils.FunctionFactory;
 import org.savadanko.math.utils.ModuleType;
 import org.savadanko.math.utils.TabularValidator;
 import org.savadanko.math.functions.UnaryFunction;
-import org.savadanko.math.logger.AppLogger;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -13,7 +12,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public final class CsvFunctionExecutor {
-    private static final Logger logger = AppLogger.getLogger(CsvFunctionExecutor.class);
+    private static final Logger logger = Logger.getLogger(CsvFunctionExecutor.class.getName());
 
     private final CsvReader csvReader;
     private final CsvWriter csvWriter;
