@@ -12,7 +12,7 @@ repositories {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
@@ -26,6 +26,9 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-params'
     testImplementation 'org.mockito:mockito-junit-jupiter:5.18.0'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // Jazzer — coverage-guided fuzz testing for Java
+    testImplementation 'com.code-intelligence:jazzer-junit:0.22.1'
 
     compileOnly 'org.projectlombok:lombok:1.18.38'
     annotationProcessor 'org.projectlombok:lombok:1.18.38'
